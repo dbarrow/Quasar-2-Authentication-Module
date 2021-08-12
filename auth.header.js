@@ -1,5 +1,3 @@
-//https://www.bezkoder.com/vue-3-authentication-jwt/
-
 import authConfig from "./auth.config";
 
 export default function authHeader() {
