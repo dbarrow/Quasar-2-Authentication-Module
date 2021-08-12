@@ -1,8 +1,7 @@
 import axios from 'axios';
 import authConfig from './auth.config'
 
-//const API_URL = 'http://147.182.210.32/api/auth/';
-const API_URL = 'http://api.test/api/auth/';
+const API_URL = 'http://api.test/api/auth/';  //
 
 class AuthService {
   login(user) {
