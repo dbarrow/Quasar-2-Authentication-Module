@@ -2,13 +2,13 @@ const routes = [
     {
         path: "/login",
         component: () => import("layouts/Landing.vue"),
-        children: [{ path: "", component: () => import("src/modules/auth/pages/Login.vue") }],
+        children: [{ path: "", component: () => import("./pages/Login.vue") }],
       },   
       
       {
         path: "/register",
         component: () => import("layouts/Landing.vue"),
-        children: [{ path: "", component: () => import("src/modules/auth/pages/Register.vue") }],
+        children: [{ path: "", component: () => import("./pages/Register.vue") }],
       },    
   ]
   
