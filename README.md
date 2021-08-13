@@ -9,6 +9,13 @@ This repository provides an opinionated implematation of authenitication for Qua
 ## Motivation
 The module was created to have reusable authentication for Quasar/Vue 3 frontend apps & Laravel backend API's with minimal wiring.
 
+## Dependencies
+
+Quasar's built in validation is used for forms.  A rules extension provided by https://github.com/cuatromedios/quasar-app-extension-vuelidate-rules is required.
+
+Install per repository instructions.
+
+
 ## Installation
 * Create Quasar 2 app with quasar-cli. See https://quasar.dev/quasar-cli/installation
 * Create directory in src folder named modules
