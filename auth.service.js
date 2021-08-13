@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authConfig from './auth.config'
 
-const API_URL = 'http://api.test/api/auth/';  //
+const API_URL = authConfig.BASE_API_URL;  //
 
 class AuthService {
   login(user) {
@@ -13,7 +13,7 @@ class AuthService {
       })
       .then(response => {
         if (response.data.data.token) {
-          localStorage.setItem(authConfig.userLocalStorageKey, JSON.stringify(response.data.data));
+          localStorage.setItem(authConfig.USER_LOCAL_STORAGE_KEY, JSON.stringify(response.data.data.token));
         }
         console.log(response.data.data.user)
         return response.data.data;
@@ -21,7 +21,7 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(authConfig.userLocalStorageKey);
+    localStorage.removeItem(authConfig.USER_LOCAL_STORAGE_KEY);
   }
 
   register(user) {
