@@ -2,7 +2,7 @@
   <q-card class="login-card fixed-center q-pa-lg">
     <q-card-section>
       {{ isValid }}
-      <form @submit.prevent.stop="register" class="q-gutter-md">
+      <form  @submit.prevent.stop="register" class="q-gutter-md" @validation-success="!isValid">
         <q-input
           ref="nameRef"
           v-model="name"
@@ -138,6 +138,7 @@ export default {
         email.value &&
         password.value &&
         passwordConfirmation.value
+        && passwordConfirmation.value == password.value
       ) {
         return false;
       }

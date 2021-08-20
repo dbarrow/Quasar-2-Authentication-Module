@@ -1,13 +1,12 @@
 <template>
   <q-card class="login-card fixed-center q-pa-lg" >
     <q-card-section>
-      <form @submit.prevent.stop="login">
-        <q-input
-          ref="emailRef"
-          v-model="email"
-          label="Email"
-          :rules="[(val) => !!val || 'Email is required']"
-        >
+      <form @submit.prevent.stop="login" >
+      <q-input
+         ref="emailRef"
+         v-model="email"
+         label="Email"
+         :rules="[(val) => !!val || 'Email is required']">
         </q-input>
         <q-input
           type="password"
@@ -37,6 +36,7 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import authConfig from "../auth.config";
 
 export default {
   setup() {
@@ -51,6 +51,7 @@ export default {
 
     const loginError = ref(false);
 
+
     function login() {
 
       loginError.value = false
@@ -63,7 +64,8 @@ export default {
       console.log(user);
       $store.dispatch("auth/login", user).then(
         () => {
-          $router.push("/app");
+          console.log(authConfig.SUCCESSFUL_LOGIN_ROUTE)
+          $router.push(authConfig.SUCCESSFUL_LOGIN_ROUTE);
         },
         (error) => {
           loading = false;
@@ -79,7 +81,7 @@ export default {
       );
     }
 
-    return { email, password, emailRef, passwordRef, login, loginError };
+    return { email, password, emailRef, passwordRef, login, loginError};
   },
 };
 </script>
