@@ -1,5 +1,3 @@
-### This repository is in active initial development. Breaking changes WILL occur. Stay tuned for stable version.
-
 # Quasar 2 Authentication Module
 Quasar 2 based authentication module that handles login, logout, routing and auth middleware.
 
