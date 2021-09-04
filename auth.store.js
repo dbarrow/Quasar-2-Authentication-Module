@@ -13,6 +13,7 @@ export const auth = {
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
+          console.log("user at loigin:",user)
           commit('loginSuccess', user);
           return Promise.resolve(user);
         },  
@@ -37,12 +38,28 @@ export const auth = {
           return Promise.reject(error);
         }
       );
-    }
+    },
+
+    resetPassword({state}, passwords){
+      console.log("Passwords ;" ,passwords)
+
+      return AuthService.resetPassword( state.user.user ,  passwords).then(
+        response => {
+          console.log(response.data.data)
+          return Promise.resolve(response.data)
+        }, 
+        error => {
+          return Promise.reject(error)
+        }
+      )
+
+    }    
   },
   mutations: {
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
+      console.log("Logged in User: ", state.user)
     },
     loginFailure(state) {
       state.status.loggedIn = false;

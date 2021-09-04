@@ -1,7 +1,8 @@
 import axios from "axios";
 import authConfig from "./auth.config";
+import authHeader from "../auth/auth.header";
 
-const API_URL = authConfig.BASE_API_URL; //
+const API_URL = authConfig.BASE_API_URL;
 
 class AuthService {
   login(user) {
@@ -14,8 +15,14 @@ class AuthService {
         if (response.data.data.token) {
           localStorage.setItem(
             authConfig.USER_LOCAL_STORAGE_KEY,
-            JSON.stringify(response.data.data.token)
+            JSON.stringify(response.data.data)
           );
+          if (response.data.data.user.forgot_password_timestamp != null) {
+            localStorage.setItem(
+              "PRR",
+              JSON.stringify(response.data.data.user.forgot_password_timestamp)
+            );
+          }
         }
         return response.data.data;
       });
@@ -32,6 +39,34 @@ class AuthService {
       password: user.password,
       password_confirmation: user.password_confirmation,
     });
+  }
+
+  forgotPassword(email) {
+    return axios
+      .post(API_URL + "forgotPassword", {
+        email: email,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  }
+
+  resetPassword(user, passwords) {
+    console.log("Passwords:: ", passwords);
+    return axios
+      .post(
+        API_URL + "resetPassword",
+        {
+          user: user.id,
+          password: passwords.password,
+          password_confirmation: passwords.passwordConfirmation,
+        },
+        { headers: authHeader() }
+      )
+      .then((response) => {
+        console.log("Response Payload: ", response.data.data);
+        return response;
+      });
   }
 
   emailExist(email) {

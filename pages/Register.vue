@@ -1,21 +1,24 @@
 <template>
-  <q-card class="login-card fixed-center q-pa-lg">
-    <q-card-section>
-      {{ isValid }}
+      <h6 class="no-margin flex flex-center q-pb-md">Register</h6>
+
       <form  @submit.prevent.stop="register" class="q-gutter-md" @validation-success="!isValid">
+
         <q-input
           ref="nameRef"
+          outlined          
           v-model="name"
           label="Name"
-          :rules="[(val) => !!val || 'Nmae is required']"
+          :rules="[(val) => !!val || 'Name is required']"
         >
         </q-input>
 
         <q-input
+        outlined
           debounce="500"
           ref="emailRef"
           v-model="email"
           label="Email"
+          type="email"
           :rules="[
             (val) => !!val || 'Email is required',
             (val) => emailExist(val) || 'Email exists',
@@ -25,6 +28,7 @@
         </q-input>
 
         <q-input
+        outlined
           ref="companyRef"
           v-model="companyName"
           label="Company Name"
@@ -33,6 +37,7 @@
         </q-input>
 
         <q-input
+        outlined
           autocomplete="new-password"
           :type="isPwd ? 'password' : 'text'"
           ref="passwordRef"
@@ -57,6 +62,7 @@
         </q-input>
 
         <q-input
+        outlined
           autocomplete="new-password"
           :type="isConfirmPwd ? 'password' : 'text'"
           ref="passwordConfirmationRef"
@@ -98,8 +104,7 @@
           />
         </div>
       </form>
-    </q-card-section>
-  </q-card>
+   
 </template>
 
 <script>
