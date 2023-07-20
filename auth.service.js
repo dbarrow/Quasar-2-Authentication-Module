@@ -70,6 +70,7 @@ class AuthService {
   }
 
   emailExist(email) {
+    console.log(API_URL)
     return axios.post(API_URL + "emailExist", {
       email: email,
     });
