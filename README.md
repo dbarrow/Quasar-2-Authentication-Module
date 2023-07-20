@@ -1,4 +1,4 @@
-# Quasar 2 Authentication Module
+# Quasar 2 Authentication Module - 07-20-23
 Quasar 2 based authentication module that handles login, logout, routing and auth middleware.
 
 This repository provides an opinionated implematation of authenitication for Quasar/Vue3 applications. The module was created to consume a Laravel 8 REST API powered by Sanctum Token based Authentication. The module should be adapatable to other backends. It is at the descretion of the user to modify the module to interact with other backends.
