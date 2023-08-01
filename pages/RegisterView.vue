@@ -1,115 +1,111 @@
 <template>
-      <h6 class="no-margin flex flex-center q-pb-md">Register</h6>
+  <h6 class="no-margin flex flex-center q-pb-md">Register</h6>
 
-      <form  @submit.prevent.stop="register" class="q-gutter-md" @validation-success="!isValid">
+  <form
+    @submit.prevent.stop="register"
+    class="q-gutter-md"
+    @validation-success="!isValid"
+  >
+    <q-input
+      ref="nameRef"
+      outlined
+      v-model="name"
+      label="Name"
+      :rules="[(val) => !!val || 'Name is required']"
+    >
+    </q-input>
 
-        <q-input
-          ref="nameRef"
-          outlined          
-          v-model="name"
-          label="Name"
-          :rules="[(val) => !!val || 'Name is required']"
-        >
-        </q-input>
+    <q-input
+      outlined
+      debounce="500"
+      ref="emailRef"
+      v-model="email"
+      label="Email"
+      type="email"
+      :rules="[
+        (val) => !!val || 'Email is required',
+        (val) => emailExist(val) || 'Email exists',
+        $rules.email('not a valid email'),
+      ]"
+    >
+    </q-input>
 
-        <q-input
-        outlined
-          debounce="500"
-          ref="emailRef"
-          v-model="email"
-          label="Email"
-          type="email"
-          :rules="[
-            (val) => !!val || 'Email is required',
-            (val) => emailExist(val) || 'Email exists',
-            $rules.email('not a valid email'),
-          ]"
-        >
-        </q-input>
+    <q-input
+      outlined
+      ref="companyRef"
+      v-model="companyName"
+      label="Company Name"
+      :rules="[(val) => !!val || 'Compnay Name is required']"
+    >
+    </q-input>
 
-        <q-input
-        outlined
-          ref="companyRef"
-          v-model="companyName"
-          label="Company Name"
-          :rules="[(val) => !!val || 'Compnay Name is required']"
-        >
-        </q-input>
+    <q-input
+      outlined
+      autocomplete="new-password"
+      :type="isPwd ? 'password' : 'text'"
+      ref="passwordRef"
+      v-model="password"
+      label="Password"
+      :rules="[
+        (val) => !!val || 'Password is required',
 
-        <q-input
-        outlined
-          autocomplete="new-password"
-          :type="isPwd ? 'password' : 'text'"
-          ref="passwordRef"
-          v-model="password"
-          label="Password"
-          :rules="[
-            (val) => !!val || 'Password is required',
+        $rules.minLength(6, 'Password must be contain at least 6 characters'),
+      ]"
+    >
+      <template v-slot:append>
+        <q-icon
+          :name="isPwd ? 'visibility_off' : 'visibility'"
+          class="cursor-pointer"
+          @click="isPwd = !isPwd"
+        />
+      </template>
+    </q-input>
 
-            $rules.minLength(
-              6,
-              'Password must be contain at least 6 characters'
-            ),
-          ]"
-        >
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd = !isPwd"
-            />
-          </template>
-        </q-input>
-
-        <q-input
-        outlined
-          autocomplete="new-password"
-          :type="isConfirmPwd ? 'password' : 'text'"
-          ref="passwordConfirmationRef"
-          v-model="passwordConfirmation"
-          label="Password Confirmation"
-          :rules="[
-            (val) => !!val || 'Password is required',
-            $rules.sameAs(password, 'Passwords do not match'),
-            $rules.minLength(
-              6,
-              'Password must be contain at least 6 characters'
-            ),
-          ]"
-        >
-          <template v-slot:append>
-            <q-icon
-              :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isConfirmPwd = !isConfirmPwd"
-            />
-          </template>
-        </q-input>
-        <q-banner
-          v-if="loginError"
-          inline-actions
-          rounded
-          class="bg-red text-white q-mb-md"
-        >
-          {{ loginError }}
-        </q-banner>
-        <div class="row q-mt-lg">
-          <q-btn
-            :disabled="isValid"
-            type="submit"
-            color="blue"
-            text-color="white"
-            label="Register"
-            class="col-grow"
-          />
-        </div>
-      </form>
-   
+    <q-input
+      outlined
+      autocomplete="new-password"
+      :type="isConfirmPwd ? 'password' : 'text'"
+      ref="passwordConfirmationRef"
+      v-model="passwordConfirmation"
+      label="Password Confirmation"
+      :rules="[
+        (val) => !!val || 'Password is required',
+        $rules.sameAs(password, 'Passwords do not match'),
+        $rules.minLength(6, 'Password must be contain at least 6 characters'),
+      ]"
+    >
+      <template v-slot:append>
+        <q-icon
+          :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
+          class="cursor-pointer"
+          @click="isConfirmPwd = !isConfirmPwd"
+        />
+      </template>
+    </q-input>
+    <q-banner
+      v-if="loginError"
+      inline-actions
+      rounded
+      class="bg-red text-white q-mb-md"
+    >
+      {{ loginError }}
+    </q-banner>
+    <div class="row q-mt-lg">
+      <q-btn
+        :disabled="isValid"
+        type="submit"
+        color="blue"
+        text-color="white"
+        label="Register"
+        class="col-grow"
+      />
+    </div>
+  </form>
 </template>
 
 <script>
-import { ref, computed} from "vue";
-import { useStore } from "vuex";
+import { ref, computed } from "vue";
+import { useAuthStore } from "../auth.store";
 import { useRouter } from "vue-router";
 import authService from "src/modules/auth/auth.service";
 
@@ -130,7 +126,7 @@ export default {
     const passwordConfirmation = ref();
     const passwordConfirmationRef = ref("");
 
-    const $store = useStore();
+    const $store = useAuthStore();
     const $router = useRouter();
 
     const isPwd = ref(true);
@@ -142,8 +138,8 @@ export default {
         companyName.value &&
         email.value &&
         password.value &&
-        passwordConfirmation.value
-        && passwordConfirmation.value == password.value
+        passwordConfirmation.value &&
+        passwordConfirmation.value == password.value
       ) {
         return false;
       }
@@ -163,7 +159,7 @@ export default {
         password: password.value,
         password_confirmation: passwordConfirmation.value,
       };
-      $store.dispatch("auth/register", user).then(
+      $store.register(user).then(
         () => {
           console.log(user);
           $router.push("/app");

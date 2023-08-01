@@ -24,7 +24,7 @@ class AuthService {
             );
           }
         }
-        return response.data.data;
+        return response.data;
       });
   }
 
@@ -41,36 +41,29 @@ class AuthService {
     });
   }
 
-  forgotPassword(email) {
-    return axios
-      .post(API_URL + "forgotPassword", {
-        email: email,
-      })
-      .then((response) => {
-        console.log(response);
-      });
+  async forgotPassword(email) {
+    const response = await axios.post(API_URL + "forgotPassword", {
+      email: email,
+    });
+    console.log(response);
   }
 
-  resetPassword(user, passwords) {
-    console.log("Passwords:: ", passwords);
-    return axios
-      .post(
-        API_URL + "resetPassword",
-        {
-          user: user.id,
-          password: passwords.password,
-          password_confirmation: passwords.passwordConfirmation,
-        },
-        { headers: authHeader() }
-      )
-      .then((response) => {
-        console.log("Response Payload: ", response.data.data);
-        return response;
-      });
+  async resetPassword(user, passwords) {
+    const response = await axios.post(
+      API_URL + "resetPassword",
+      {
+        user: user.id,
+        password: passwords.password,
+        password_confirmation: passwords.passwordConfirmation,
+      },
+      { headers: authHeader() }
+    );
+    console.log("Response Payload: ", response.data.data);
+    return response;
   }
 
   emailExist(email) {
-    console.log(API_URL)
+    console.log(API_URL);
     return axios.post(API_URL + "emailExist", {
       email: email,
     });

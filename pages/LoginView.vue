@@ -3,7 +3,7 @@
     <h6 class="no-margin flex flex-center q-pb-lg">Login</h6>
 
     <q-input
-    autofocus
+      autofocus
       ref="emailRef"
       v-model="email"
       label="Email"
@@ -16,10 +16,10 @@
       ref="passwordRef"
       v-model="password"
       label="Password"
-      :rules="[(val) => !!val || 'Passwoord is required']"
+      :rules="[(val) => !!val || 'Password is required']"
     >
     </q-input>
-    
+
     <q-banner
       v-if="loginError"
       inline-actions
@@ -51,7 +51,7 @@
 
 <script>
 import { ref } from "vue";
-import { useStore } from "vuex";
+import { useAuthStore } from "../auth.store";
 import { useRouter } from "vue-router";
 import authConfig from "../auth.config";
 
@@ -63,42 +63,24 @@ export default {
     const password = ref();
     const passwordRef = ref(null);
 
-    const $store = useStore();
+    const $store = useAuthStore();
     const $router = useRouter();
 
     const loginError = ref(false);
 
     function login() {
-      loginError.value = false;
-
       emailRef.value.validate();
       passwordRef.value.validate();
-
-      let loading = true;
       let user = { email: email.value, password: password.value };
-      $store.dispatch("auth/login", user).then(
+      $store.login(user).then(
         (response) => {
-          console.log(
-            "Response from Login: ",
-            response.user.forgot_password_timestamp
-          );
-
           $router.push(authConfig.SUCCESSFUL_LOGIN_ROUTE);
         },
         (error) => {
-          loading = false;
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(error.response.data.message);
-          loginError.value = this.message;
+          loginError.value = error.response.data.message.toString();
         }
       );
     }
-
     return { email, password, emailRef, passwordRef, login, loginError };
   },
 };
