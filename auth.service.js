@@ -33,12 +33,29 @@ class AuthService {
   }
 
   register(user) {
-    return axios.post(API_URL + "register", {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      password_confirmation: user.password_confirmation,
-    });
+    return axios
+      .post(API_URL + "register", {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        password_confirmation: user.password_confirmation,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data.data.token) {
+          localStorage.setItem(
+            authConfig.USER_LOCAL_STORAGE_KEY,
+            JSON.stringify(response.data.data)
+          );
+          if (response.data.data.user.forgot_password_timestamp != null) {
+            localStorage.setItem(
+              "PRR",
+              JSON.stringify(response.data.data.user.forgot_password_timestamp)
+            );
+          }
+        }
+        return response.data;
+      });
   }
 
   async forgotPassword(email) {
